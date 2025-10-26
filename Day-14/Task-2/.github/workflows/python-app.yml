@@ -1,0 +1,33 @@
+name: CI with Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install pytest
+        run: pip install pytest
+
+      - name: Run unit test cases
+        run: python test_cases.py -v
+
+      - name: All tests passed
+        if: success()
+        run: echo "All tests passed successfully!"
+
+      - name: Tests failed
+        if: failure()
+        run: echo "Tests failed. Please check the logs."
